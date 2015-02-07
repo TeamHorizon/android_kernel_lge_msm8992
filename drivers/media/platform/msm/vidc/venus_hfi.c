@@ -974,6 +974,9 @@ static int venus_hfi_vote_active_buses(void *dev,
 					bus->low_power == data[i].low_power;
 			 }
 
+			/* Check the session and low_power mode matches*/
+			  matches &= aggregate_load_table[j].bus->low_power ==
+				 data[i].low_power;
 			if (matches) {
 				aggregate_load_table[j].load +=
 					data[i].load;
