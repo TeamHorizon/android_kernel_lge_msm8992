@@ -437,7 +437,8 @@ void msm_isp_cfg_framedrop_reg(struct vfe_device *vfe_dev,
 			 * ensure that no frame will came after last, even if
 			 * userspace reg update is delayed */
 			framedrop_pattern =
-			      (1 << stream_info->runtime_burst_frame_count) - 1;
+				(1 << stream_info->runtime_num_burst_capture)
+				- 1;
 			framedrop_pattern <<=
 				stream_info->runtime_init_frame_drop;
 			/* Alternate maximum two values for period to ensure
@@ -538,15 +539,14 @@ void msm_isp_reset_framedrop(struct vfe_device *vfe_dev,
 	 * is taken into consideration But if skip frame has already
 	 * passed, burst count has to be updated accordingly
 	 */
-	if (vfe_dev->axi_data.src_info[VFE_PIX_0].frame_id == 0) {
-		stream_info->runtime_burst_frame_count =
-			stream_info->burst_frame_count;
-	} else {
-		stream_info->runtime_burst_frame_count =
-			stream_info->burst_frame_count -
-			stream_info->runtime_init_frame_drop;
+	if (vfe_dev->axi_data.src_info[VFE_PIX_0].frame_id >
+		stream_info->init_frame_drop)
 		stream_info->runtime_init_frame_drop = 0;
-	}
+	else
+		stream_info->runtime_init_frame_drop =
+			stream_info->init_frame_drop -
+			vfe_dev->axi_data.src_info[VFE_PIX_0].frame_id;
+
 	stream_info->runtime_num_burst_capture =
 		stream_info->num_burst_capture;
 
