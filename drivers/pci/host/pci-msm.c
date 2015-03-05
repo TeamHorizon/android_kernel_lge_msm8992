@@ -997,6 +997,7 @@ static void pcie_phy_init(struct msm_pcie_dev_t *dev)
 	}
 
 	msm_pcie_write_reg(dev->phy, QSERDES_COM_PLL_CNTRL, 0x46);
+	msm_pcie_write_reg(dev->phy, QSERDES_COM_BGTC, 0xFF);
 
 	/* CDR Settings */
 	msm_pcie_write_reg(dev->phy, QSERDES_RX_CDR_CONTROL1, 0xF4);
